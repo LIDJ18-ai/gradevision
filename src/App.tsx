@@ -35,6 +35,11 @@ function AppContent() {
     }
   }, [loading, user, page]);
 
+  const navigate = (target: Page) => {
+    setPage(target);
+    window.scrollTo(0, 0);
+  };
+
   const handleUploadComplete = (data: UploadedCardData) => {
     setCardData(data);
     setPage('analyzing');
