@@ -16,7 +16,7 @@ import GradeDisplay from '@/components/GradeDisplay';
 import { useAuth } from '@/context/AuthContext';
 import { supabase } from '@/lib/supabase';
 import { getSignedUrl } from '@/lib/storage';
-import { gradeLabelFromScore } from '@/lib/gradingEngine';
+import { gradeLabelFromScore, confidenceColor } from '@/lib/gradingEngine';
 import type { GradeResult, GradingReport, Page } from '@/types';
 import type { UploadedCardData } from './UploadPage';
 
@@ -163,14 +163,26 @@ export default function ReportPage({
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-6 mb-8">
           {/* Overall score */}
           <div className="card-surface-elevated p-8 flex flex-col items-center justify-center text-center">
-            <p className="text-xs uppercase tracking-[0.2em] text-gold-400 mb-5">Overall Grade</p>
+            <p className="text-xs uppercase tracking-[0.2em] text-gold-400 mb-5">Estimated Grade</p>
             <GradeDisplay score={result.overall} size="xl" />
             <p className="text-sm text-white font-medium mt-4 mb-1">
               {gradeLabelFromScore(result.overall)}
             </p>
-            <p className="text-xs text-ink-400">
-              Weighted average of all sub-grades
+            <p className="text-xs text-ink-400 mb-3">
+              Pre-grading estimate, not an official grade
             </p>
+            <div className="flex flex-col gap-2 w-full max-w-xs">
+              <div className="flex items-center justify-between px-4 py-2.5 rounded-lg bg-ink-900/60 border border-ink-700">
+                <span className="text-xs text-ink-400">Est. PSA Range</span>
+                <span className="text-sm font-mono font-medium text-gold-300">{result.estimatedRange}</span>
+              </div>
+              <div className="flex items-center justify-between px-4 py-2.5 rounded-lg bg-ink-900/60 border border-ink-700">
+                <span className="text-xs text-ink-400">Confidence</span>
+                <span className={`text-sm font-medium ${confidenceColor(result.confidenceLevel)}`}>
+                  {result.confidenceLevel}
+                </span>
+              </div>
+            </div>
           </div>
 
           {/* Card images */}
@@ -288,18 +300,29 @@ export default function ReportPage({
         {/* Summary */}
         <div className="card-surface-elevated p-8 mb-8">
           <h2 className="text-lg font-display font-semibold text-white mb-3">
-            AI Grading Summary
+            Pre-Grading Estimate Summary
           </h2>
-          <p className="text-sm text-ink-300 leading-relaxed mb-5">
+          <p className="text-sm text-ink-300 leading-relaxed mb-4">
             {result.summary}
           </p>
+          <div className="mb-4 px-4 py-3 rounded-lg border border-ink-700 bg-ink-900/40">
+            <div className="flex items-center gap-2 mb-1.5">
+              <span className={`text-sm font-medium ${confidenceColor(result.confidenceLevel)}`}>
+                {result.confidenceLevel} Confidence
+              </span>
+            </div>
+            <p className="text-xs text-ink-400 leading-relaxed">
+              {result.confidenceExplanation}
+            </p>
+          </div>
           <div className="flex items-start gap-2.5 px-4 py-3 rounded-lg border border-gold-400/20 bg-gold-400/5">
             <Info size={16} className="text-gold-400 flex-shrink-0 mt-0.5" />
             <p className="text-xs text-ink-300 leading-relaxed">
               This is a <span className="text-gold-300 font-medium">demo report</span> with simulated
-              results. The real grading engine — powered by OpenCV centering detection and AI surface
-              analysis — is being connected. Pre-grading estimates are informational only and not a
-              guarantee of or substitute for professional physical slab grading.
+              estimates. GradeVision is a pre-grading estimation tool — it does not issue official
+              grades and is not affiliated with PSA or any grading company. Estimates are based on
+              photo analysis only and cannot replicate in-hand inspection. For an authoritative grade,
+              professional physical submission is required.
             </p>
           </div>
         </div>
@@ -438,17 +461,23 @@ function EmptyImageSlot({ label }: { label: string }) {
 function generateReportText(cardData: UploadedCardData, result: GradeResult): string {
   const lines = [
     '========================================',
-    '       GradeVision AI Pre-Grading Report',
-    '           *** DEMO REPORT ***',
+    '      GradeVision AI Pre-Grading Report',
+    '          *** DEMO ESTIMATE ***',
     '========================================',
+    '',
+    'NOTE: This is a pre-grading estimate, not an',
+    'official grade. GradeVision is not affiliated',
+    'with PSA or any grading company.',
     '',
     `Card: ${cardData.cardName}`,
     cardData.cardSet && `Set: ${cardData.cardSet}`,
     cardData.cardYear && `Year: ${cardData.cardYear}`,
     `Date: ${new Date().toLocaleDateString()}`,
     '',
-    '--- OVERALL GRADE ---',
+    '--- OVERALL ESTIMATE ---',
     `${result.overall.toFixed(1)} / 10.0  (${gradeLabelFromScore(result.overall)})`,
+    `Estimated PSA Range: ${result.estimatedRange}`,
+    `Confidence: ${result.confidenceLevel}`,
     '',
     '--- SUB-GRADES ---',
     `Centering: ${result.centering.toFixed(1)}`,
@@ -480,8 +509,10 @@ function generateReportText(cardData: UploadedCardData, result: GradeResult): st
     result.summary,
     '',
     '========================================',
-    'This is a simulated demo report. Results are',
-    'not a substitute for professional grading.',
+    'GradeVision is a pre-grading estimation tool.',
+    'This is NOT an official PSA grade. Estimates',
+    'are based on photo analysis only and cannot',
+    'replicate in-hand inspection.',
     '========================================',
   ];
   return lines.filter(Boolean).join('\n');

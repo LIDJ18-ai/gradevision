@@ -1,34 +1,11 @@
 import type { GradeResult } from '@/types';
 
-const DEFECT_OPTIONS = [
-  'Minor edge whitening detected',
-  'Slight corner fraying on top-left',
-  'Micro-scratches visible under magnification',
-  'Minor print line on front surface',
-  'Light surface scuffing',
-  'Slight centering offset to the right',
-  'Minor back-edge wear',
-  'Faint fingerprint residue',
-  'Minor gloss inconsistency',
-  'Light corner dent on bottom-right',
-];
-
 function seededRandom(seed: number): () => number {
   let s = seed;
   return () => {
     s = (s * 9301 + 49297) % 233280;
     return s / 233280;
   };
-}
-
-function pick<T>(arr: T[], rand: () => number, count: number): T[] {
-  const pool = [...arr];
-  const result: T[] = [];
-  for (let i = 0; i < count && pool.length > 0; i++) {
-    const idx = Math.floor(rand() * pool.length);
-    result.push(pool.splice(idx, 1)[0]);
-  }
-  return result;
 }
 
 function clamp(n: number, min: number, max: number): number {
@@ -64,11 +41,19 @@ export function generateDemoGrade(cardName: string, seedString: string): GradeRe
   const leftPct = Math.round((45 + rand() * 12) * 10) / 10;
   const rightPct = Math.round(100 - leftPct);
 
-  const cornerDefects = pick(DEFECT_OPTIONS, rand, Math.floor(rand() * 2) + 1);
-  const edgeDefects = pick(DEFECT_OPTIONS, rand, Math.floor(rand() * 2));
-  const surfaceDefects = pick(DEFECT_OPTIONS, rand, Math.floor(rand() * 2) + 1);
+  const confidenceLevel: 'Low' | 'Moderate' | 'High' = 'Moderate';
+  const confidenceExplanation =
+    'This estimate is based on simulated analysis of the submitted images. ' +
+    'When the real grading engine is connected, confidence will reflect image quality, ' +
+    'lighting, resolution, and the completeness of submitted views (front, back, close-up).';
 
-  const summary = generateSummary(overall, centering, corners, edges, surface, cardName);
+  const estimatedRange = overall >= 9
+    ? `${(overall - 0.5).toFixed(1)}–${Math.min(10, overall + 0.5).toFixed(1)}`
+    : overall >= 8
+    ? `${(overall - 1).toFixed(1)}–${overall.toFixed(1)}`
+    : `${(overall - 1.5).toFixed(1)}–${(overall - 0.5).toFixed(1)}`;
+
+  const summary = generateSummary(overall, centering, corners, edges, surface, estimatedRange);
 
   return {
     overall,
@@ -89,7 +74,7 @@ export function generateDemoGrade(cardName: string, seedString: string): GradeRe
       topRight: clamp(7 + rand() * 3, 5, 10),
       bottomLeft: clamp(7 + rand() * 3, 5, 10),
       bottomRight: clamp(7 + rand() * 3, 5, 10),
-      defects: cornerDefects,
+      defects: [],
     },
     edgesData: {
       top: clamp(7 + rand() * 3, 5, 10),
@@ -97,16 +82,19 @@ export function generateDemoGrade(cardName: string, seedString: string): GradeRe
       left: clamp(7 + rand() * 3, 5, 10),
       right: clamp(7 + rand() * 3, 5, 10),
       wearLevel: edges >= 8 ? 'Minimal' : edges >= 7 ? 'Light' : 'Moderate',
-      defects: edgeDefects,
+      defects: [],
     },
     surfaceData: {
-      scratches: Math.floor(rand() * 4),
-      printDefects: Math.floor(rand() * 3),
-      whitening: Math.floor(rand() * 3),
+      scratches: 0,
+      printDefects: 0,
+      whitening: 0,
       overall: surface >= 8.5 ? 'Clean' : surface >= 7 ? 'Minor wear' : 'Visible wear',
-      defects: surfaceDefects,
+      defects: [],
     },
     summary,
+    confidenceLevel,
+    confidenceExplanation,
+    estimatedRange,
   };
 }
 
@@ -116,7 +104,7 @@ function generateSummary(
   corners: number,
   edges: number,
   surface: number,
-  cardName: string
+  estimatedRange: string
 ): string {
   const weakest = Math.min(centering, corners, edges, surface);
   const weakestName =
@@ -132,9 +120,24 @@ function generateSummary(
 
   const label = gradeLabel(overall);
 
-  return `This card grades at ${overall.toFixed(1)} (${label}). The ${strongestName} is the strongest attribute at ${strongest.toFixed(1)}, while the ${weakestName} is the primary area of concern at ${weakest.toFixed(1)}. Based on this pre-grade analysis, this card would likely receive a PSA-style grade in the ${overall >= 9 ? '9–10' : overall >= 8 ? '8–9' : overall >= 7 ? '7–8' : '6–7'} range. For a final authoritative grade, professional physical submission is recommended.`;
+  return (
+    `Based on the submitted images, this card is estimated to pre-grade at ${overall.toFixed(1)} ` +
+    `(${label}), with a plausible PSA-style range of ${estimatedRange}. ` +
+    `The ${strongestName} appears to be the strongest attribute at ${strongest.toFixed(1)}, ` +
+    `while the ${weakestName} is the primary area of concern at ${weakest.toFixed(1)}. ` +
+    `This is a pre-grading estimate only — it is not an official grade and does not guarantee ` +
+    `any particular result from PSA or any other grading company. ` +
+    `Final grades depend on in-hand inspection under controlled conditions, which cannot be ` +
+    `fully replicated from photos alone.`
+  );
 }
 
 export function gradeLabelFromScore(score: number): string {
   return gradeLabel(score);
+}
+
+export function confidenceColor(level: 'Low' | 'Moderate' | 'High'): string {
+  if (level === 'High') return 'text-green-400';
+  if (level === 'Moderate') return 'text-gold-300';
+  return 'text-orange-400';
 }

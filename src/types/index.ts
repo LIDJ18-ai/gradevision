@@ -90,6 +90,9 @@ export interface GradeResult {
   edgesData: EdgeData;
   surfaceData: SurfaceData;
   summary: string;
+  confidenceLevel: 'Low' | 'Moderate' | 'High';
+  confidenceExplanation: string;
+  estimatedRange: string;
 }
 
 export type Page = 'home' | 'login' | 'signup' | 'upload' | 'analyzing' | 'report' | 'dashboard';
