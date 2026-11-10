@@ -45,8 +45,8 @@ export default function AuthPage({ mode, onNavigate }: AuthPageProps) {
           </h1>
           <p className="text-sm text-ink-400">
             {isSignup
-              ? 'Start grading your Pokémon cards with AI precision.'
-              : 'Sign in to access your grading dashboard.'}
+              ? 'Start pre-grading your Pokémon cards with AI precision.'
+              : 'Sign in to access your pre-grading dashboard.'}
           </p>
         </div>
 

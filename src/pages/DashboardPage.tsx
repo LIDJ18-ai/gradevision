@@ -102,7 +102,7 @@ export default function DashboardPage({ onNavigate }: DashboardPageProps) {
         <div className="card-surface-elevated p-10 text-center max-w-md">
           <AlertCircle size={28} className="text-gold-400 mx-auto mb-4" />
           <h2 className="text-xl font-display font-semibold text-white mb-2">Sign in required</h2>
-          <p className="text-sm text-ink-400 mb-6">Please sign in to view your grading dashboard.</p>
+          <p className="text-sm text-ink-400 mb-6">Please sign in to view your pre-grading dashboard.</p>
           <button onClick={() => onNavigate('login')} className="btn-gold w-full">
             Sign In
           </button>
@@ -121,18 +121,18 @@ export default function DashboardPage({ onNavigate }: DashboardPageProps) {
               Your Dashboard
             </h1>
             <p className="text-sm text-ink-400">
-              {reports.length} grading{reports.length !== 1 ? 's' : ''} on record
+              {reports.length} pre-grade{reports.length !== 1 ? 's' : ''} on record
             </p>
           </div>
           <button onClick={() => onNavigate('upload')} className="btn-gold">
             <Plus size={16} />
-            New Grading
+            New Pre-Grade
           </button>
         </div>
 
         {/* Stats */}
         <div className="grid grid-cols-3 gap-4 mb-8">
-          <StatCard label="Total Gradings" value={String(reports.length)} icon={Inbox} />
+          <StatCard label="Total Pre-Grades" value={String(reports.length)} icon={Inbox} />
           <StatCard label="Average Grade" value={avgGrade} icon={Award} />
           <StatCard label="Highest Grade" value={highestGrade} icon={Award} />
         </div>
@@ -173,14 +173,14 @@ export default function DashboardPage({ onNavigate }: DashboardPageProps) {
               <ImageIcon size={28} className="text-gold-400" strokeWidth={1.5} />
             </div>
             <h2 className="text-xl font-display font-semibold text-white mb-2">
-              No gradings yet
+              No pre-grades yet
             </h2>
             <p className="text-sm text-ink-400 mb-6 max-w-sm mx-auto">
-              Submit your first card for AI pre-grading and it will appear here in your history.
+              Submit your first card for AI pre-grading and your estimate will appear here in your history.
             </p>
             <button onClick={() => onNavigate('upload')} className="btn-gold">
               <Plus size={16} />
-              Start First Grading
+              Start First Pre-Grade
             </button>
           </div>
         )}
@@ -200,7 +200,7 @@ export default function DashboardPage({ onNavigate }: DashboardPageProps) {
             ))}
             {filteredReports.length === 0 && search && (
               <div className="text-center py-12 text-sm text-ink-400">
-                No gradings found matching "{search}"
+                No pre-grades found matching "{search}"
               </div>
             )}
           </div>

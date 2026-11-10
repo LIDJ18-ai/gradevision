@@ -22,12 +22,12 @@ const ANALYSIS_FEATURES = [
   {
     icon: Crosshair,
     title: 'Centering Analysis',
-    description: 'OpenCV-powered border measurement calculates exact top/bottom and left/right ratios to within 0.1mm precision.',
+    description: 'Border measurement estimates exact top/bottom and left/right ratios to assess how well the card image is framed.',
   },
   {
     icon: Square,
     title: 'Corner Inspection',
-    description: 'Each corner is individually scored for sharpness, rounding, fraying, and whitening under magnification-level detail.',
+    description: 'Each corner is individually evaluated for sharpness, rounding, fraying, and whitening — factors that impact the estimated grade.',
   },
   {
     icon: Layers,
@@ -37,15 +37,15 @@ const ANALYSIS_FEATURES = [
   {
     icon: FileSearch,
     title: 'Surface Assessment',
-    description: 'Scratches, print defects, scuffing, and gloss inconsistencies are catalogued and weighed against grading standards.',
+    description: 'Scratches, print defects, scuffing, and gloss inconsistencies are identified and weighed against PSA-style grading standards.',
   },
 ];
 
 const STEPS = [
   { num: '01', title: 'Upload Card Images', description: 'Submit front, back, and close-up photos of your card in high resolution.' },
   { num: '02', title: 'AI Analysis', description: 'Our engine analyzes centering, corners, edges, and surface using computer vision.' },
-  { num: '03', title: 'Detailed Report', description: 'Receive a comprehensive 1–10 grade with sub-scores and defect notes.' },
-  { num: '04', title: 'Track History', description: 'All your gradings are saved to your dashboard for future reference.' },
+  { num: '03', title: 'Detailed Report', description: 'Receive a comprehensive estimated grade with sub-scores, a confidence level, and a plausible PSA range.' },
+  { num: '04', title: 'Track History', description: 'All your pre-grades are saved to your dashboard for future reference.' },
 ];
 
 export default function HomePage({ onNavigate }: HomePageProps) {
@@ -82,18 +82,18 @@ export default function HomePage({ onNavigate }: HomePageProps) {
 
             <p className="text-lg text-ink-300 leading-relaxed max-w-2xl mb-8">
               GradeVision uses computer vision and AI to analyze your Pokémon cards'
-              centering, corners, edges, and surface — delivering a detailed 1–10
-              pre-grade report in minutes, not weeks.
+              centering, corners, edges, and surface — delivering a detailed pre-grading
+              estimate with a confidence level and plausible PSA range in minutes, not weeks.
             </p>
 
             <div className="flex flex-col sm:flex-row gap-4 mb-8">
               <button onClick={() => onNavigate(user ? 'upload' : 'signup')} className="btn-gold">
-                {user ? 'Start New Grading' : 'Get Started Free'}
+                {user ? 'Start New Pre-Grade' : 'Get Started Free'}
                 <ArrowRight size={16} />
               </button>
               <button onClick={() => onNavigate('upload')} className="btn-outline-gold">
                 <ScanLine size={16} />
-                Try a Demo Grading
+                Try a Demo Pre-Grade
               </button>
             </div>
 
@@ -120,7 +120,7 @@ export default function HomePage({ onNavigate }: HomePageProps) {
         <div className="card-surface px-6 py-4 flex items-center gap-3">
           <AlertCircle size={18} className="text-gold-400 flex-shrink-0" />
           <p className="text-sm text-ink-300">
-            <span className="text-gold-300 font-medium">Demo Mode:</span> Grading results are
+            <span className="text-gold-300 font-medium">Demo Mode:</span> Pre-grading estimates are
             currently simulated for demonstration. The real computer vision engine is being
             connected — all reports are clearly labeled as demo until then.
           </p>
@@ -208,10 +208,10 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       <section className="section-padding max-w-7xl mx-auto py-24">
         <div className="text-center mb-12">
           <span className="text-xs tracking-[0.2em] uppercase text-gold-400">
-            Grading Scale
+            Estimation Scale
           </span>
           <h2 className="text-4xl md:text-5xl font-display font-semibold text-white mt-3">
-            The 1–10 standard
+            The 1–10 estimation scale
           </h2>
         </div>
 
@@ -246,12 +246,12 @@ export default function HomePage({ onNavigate }: HomePageProps) {
             </h3>
             <p className="text-ink-400 leading-relaxed">
               All image processing runs through encrypted server-side pipelines. Your card
-              images and grading history are private to your account, and API keys never
+              images and pre-grading history are private to your account, and API keys never
               touch the browser.
             </p>
           </div>
           <button onClick={() => onNavigate(user ? 'upload' : 'signup')} className="btn-gold flex-shrink-0">
-            {user ? 'Start Grading' : 'Create Account'}
+            {user ? 'Start Pre-Grading' : 'Create Account'}
             <ArrowRight size={16} />
           </button>
         </div>
@@ -260,10 +260,10 @@ export default function HomePage({ onNavigate }: HomePageProps) {
       {/* CTA */}
       <section className="section-padding max-w-7xl mx-auto py-20 text-center">
         <h2 className="text-4xl md:text-5xl font-display font-semibold text-white mb-4">
-          Ready to grade your collection?
+          Ready to pre-grade your collection?
         </h2>
         <p className="text-ink-400 max-w-xl mx-auto mb-8">
-          Upload your first card and receive a detailed pre-grading report in minutes.
+          Upload your first card and receive a detailed pre-grading estimate with a confidence level and plausible PSA range in minutes.
         </p>
         <button onClick={() => onNavigate(user ? 'upload' : 'signup')} className="btn-gold text-base px-8 py-4">
           {user ? 'Start New Grading' : 'Get Started Free'}

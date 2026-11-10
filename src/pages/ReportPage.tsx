@@ -122,7 +122,7 @@ export default function ReportPage({
           <div>
             <div className="flex items-center gap-3 mb-3">
               <span className="px-3 py-1 rounded-full text-[10px] uppercase tracking-[0.15em] border border-gold-400/30 bg-gold-400/5 text-gold-300">
-                Demo Report
+                Demo Estimate
               </span>
               {saved && (
                 <span className="flex items-center gap-1.5 text-xs text-green-400">
@@ -144,7 +144,7 @@ export default function ReportPage({
               {cardData.cardSet && <span>{cardData.cardSet}</span>}
               {cardData.cardSet && cardData.cardYear && <span> · </span>}
               {cardData.cardYear && <span>{cardData.cardYear}</span>}
-              {!cardData.cardSet && !cardData.cardYear && <span>Grading Report</span>}
+              {!cardData.cardSet && !cardData.cardYear && <span>Pre-Grading Report</span>}
             </p>
           </div>
           <div className="flex gap-3">
@@ -154,7 +154,7 @@ export default function ReportPage({
             </button>
             <button onClick={onNewGrading} className="btn-outline-gold text-sm px-4 py-2">
               <RotateCcw size={14} />
-              New Grading
+              New Pre-Grade
             </button>
           </div>
         </div>
@@ -244,8 +244,8 @@ export default function ReportPage({
               <BorderStat label="Right" value={`${result.centeringData.right}%`} />
             </div>
             <p className="text-xs text-ink-500 mt-4 leading-relaxed">
-              Border percentages are calculated using OpenCV contour detection on the card edge
-              relative to the image frame.
+              Border percentages are estimated from the card edge relative to the image frame.
+              When the real engine is connected, these will be measured using computer vision edge detection.
             </p>
           </div>
 
@@ -334,7 +334,7 @@ export default function ReportPage({
             <ArrowRight size={16} />
           </button>
           <button onClick={onNewGrading} className="btn-gold">
-            Grade Another Card
+            Pre-Grade Another Card
             <ArrowRight size={16} />
           </button>
         </div>

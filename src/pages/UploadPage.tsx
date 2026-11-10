@@ -150,7 +150,7 @@ export default function UploadPage({ onNavigate, onComplete }: UploadPageProps) 
             Sign in to upload
           </h2>
           <p className="text-sm text-ink-400 mb-6">
-            You need an account to submit cards for grading. Your reports are saved privately to your dashboard.
+            You need an account to submit cards for pre-grading. Your reports are saved privately to your dashboard.
           </p>
           <div className="flex flex-col gap-3">
             <button onClick={() => onNavigate('signup')} className="btn-gold w-full">
@@ -197,7 +197,7 @@ export default function UploadPage({ onNavigate, onComplete }: UploadPageProps) 
               Tell us about your card
             </h1>
             <p className="text-sm text-ink-400 mb-8">
-              Enter the details so we can label your grading report correctly.
+              Enter the details so we can label your pre-grading report correctly.
             </p>
 
             {infoError && (
@@ -321,7 +321,7 @@ export default function UploadPage({ onNavigate, onComplete }: UploadPageProps) 
                   </>
                 ) : (
                   <>
-                    Start AI Analysis
+                    Start Pre-Grade Analysis
                     <ArrowRight size={16} />
                   </>
                 )}

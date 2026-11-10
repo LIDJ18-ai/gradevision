@@ -10,10 +10,10 @@ interface AnalyzingPageProps {
 }
 
 const STAGES = [
-  { icon: Crosshair, label: 'Measuring centering', desc: 'Calculating border ratios with OpenCV edge detection' },
-  { icon: Square, label: 'Inspecting corners', desc: 'Detecting rounding, fraying, and whitening on all four corners' },
-  { icon: Layers, label: 'Evaluating edges', desc: 'Scanning edge wear, nicking, and silvering' },
-  { icon: FileSearch, label: 'Assessing surface', desc: 'Identifying scratches, print defects, and gloss issues' },
+  { icon: Crosshair, label: 'Estimating centering', desc: 'Analyzing border ratios and card framing' },
+  { icon: Square, label: 'Inspecting corners', desc: 'Evaluating rounding, fraying, and whitening on all four corners' },
+  { icon: Layers, label: 'Evaluating edges', desc: 'Checking edge wear, nicking, and silvering' },
+  { icon: FileSearch, label: 'Assessing surface', desc: 'Looking for scratches, print defects, and gloss issues' },
 ];
 
 export default function AnalyzingPage({ cardData, onComplete }: AnalyzingPageProps) {
@@ -47,7 +47,7 @@ export default function AnalyzingPage({ cardData, onComplete }: AnalyzingPagePro
             </div>
           </div>
           <h1 className="text-3xl font-display font-semibold text-white mb-2">
-            Analyzing your card
+            Pre-grading your card
           </h1>
           <p className="text-sm text-ink-400">
             {cardData.cardName} — running four-point AI evaluation

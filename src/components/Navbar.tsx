@@ -37,7 +37,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
         {/* Desktop nav */}
         <nav className="hidden md:flex items-center gap-8">
           {navLink('home', 'Home')}
-          {navLink('upload', 'New Grading')}
+          {navLink('upload', 'New Pre-Grade')}
           {user && navLink('dashboard', 'Dashboard')}
         </nav>
 
@@ -78,7 +78,7 @@ export default function Navbar({ currentPage, onNavigate }: NavbarProps) {
         <div className="md:hidden border-t border-ink-700/60 bg-ink-900/95 backdrop-blur-md">
           <div className="px-6 py-4 flex flex-col gap-4">
             {navLink('home', 'Home')}
-            {navLink('upload', 'New Grading')}
+            {navLink('upload', 'New Pre-Grade')}
             {user && navLink('dashboard', 'Dashboard')}
             <div className="pt-2 border-t border-ink-700/40 flex flex-col gap-3">
               {user ? (

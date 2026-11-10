@@ -14,7 +14,7 @@ export default function Footer({ onNavigate }: FooterProps) {
             <Logo size="md" />
             <p className="text-sm text-ink-400 mt-4 max-w-sm leading-relaxed">
               Professional AI-powered pre-grading for Pokémon trading cards.
-              Centering, corners, edges, and surface analysis with detailed 1–10 grading reports.
+              Centering, corners, edges, and surface analysis with detailed estimates, confidence levels, and plausible PSA ranges.
             </p>
           </div>
 
